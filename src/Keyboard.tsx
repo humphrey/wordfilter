@@ -19,6 +19,8 @@ interface Props {
   onKeyPress: (key: string) => void
   onBackspace?: () => void
   onSpacebar?: () => void
+  includes?: ReadonlyArray<string>
+  eliminated?: ReadonlyArray<string>
 }
 
 export const Keyboard = (props: Props) => {
@@ -32,18 +34,24 @@ export const Keyboard = (props: Props) => {
     }
     return true;
   }));
-
+  
   return (
 
     <div>
       {chars.map((row, rowIndex) => (
         <div key={rowIndex} className='my-1'>
           {row.map(char => (
-            <Key key={char} char={char} onClick={() => {
-              if (props.onBackspace && char === BACKSPACE_KEY) props.onBackspace();
-              if (props.onSpacebar && char === SPACE_KEY) props.onSpacebar();
-              else props.onKeyPress(char)
-            }}/>
+            <Key 
+              key={char} 
+              char={char} 
+              onClick={() => {
+                if (props.onBackspace && char === BACKSPACE_KEY) props.onBackspace();
+                if (props.onSpacebar && char === SPACE_KEY) props.onSpacebar();
+                else props.onKeyPress(char)
+              }}
+              included={props.includes?.includes(char)}
+              eliminated={props.eliminated?.includes(char)}
+            />
           ))}
         </div>
       ))}
@@ -58,12 +66,19 @@ export const Keyboard = (props: Props) => {
 interface KeyProps {
   char: string
   onClick: () => void
+  eliminated?: boolean
+  included?: boolean
 }
 
-const Key = ({char, onClick}: KeyProps) => {
+const Key = ({char, onClick, eliminated, included}: KeyProps) => {
   return (
     <button 
-      className={cs('btn btn-outline-dark me-1 px-0', isSpecialKey(char) && 'fw-bold')}
+      className={cs(
+        'btn btn-outline-dark me-1 px-0', 
+        isSpecialKey(char) && 'fw-bold',
+        eliminated && 'bg-dark-subtle text-muted',
+        included && 'bg-warning-subtle text-muted',
+      )}
       style={{width: isSpecialKey(char)  ? '40px' : '30px'}}
       onClick={onClick}
     >

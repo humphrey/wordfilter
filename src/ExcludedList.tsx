@@ -20,22 +20,22 @@ export const ExcludedList = (props: Props) => {
       <div className='d-flex justify-content-center'>
         <button 
           className={cs('btn mx-3', active === 'includes' ? 'btn-outline-primary': 'btn-light')}
-          onClick={() => setActive('includes')}
+          onClick={() => setActive(active == 'includes' ? null : 'includes')}
         >
           <small className='text-muted'>Includes</small>
           <div>
-            {props.filter.includes.map(char => <span className='fw-bold text-success me-1'>{char}</span>)}
+            {props.filter.includes.map(char => <span className='fw-bold text-warning me-1'>{char}</span>)}
           </div>
           {props.filter.includes.length === 0 && <small className='text-muted'>&mdash;</small>}
         </button>
 
         <button 
           className={cs('btn', active === 'excludes' ? 'btn-outline-primary': 'btn-light')}
-          onClick={() => setActive('excludes')}
+          onClick={() => setActive(active == 'excludes' ? null : 'excludes')}
         >
           <small className='text-muted'>Excludes</small>
           <div>
-            {props.filter.excludes.map(char => <span className='fw-bold text-danger me-1'>{char}</span>)}
+            {props.filter.excludes.map(char => <span className='fw-bold text-secondary me-1'>{char}</span>)}
           </div>
           {props.filter.excludes.length === 0 && <small className='text-muted'>&mdash;</small>}
         </button>
@@ -53,6 +53,8 @@ export const ExcludedList = (props: Props) => {
 
       {active !== null &&
         <Keyboard
+          includes={includes}
+          eliminated={excludes}
           onKeyPress={(key) => {
             if (active === 'includes') {
               if (includes.includes(key)) 
@@ -67,15 +69,6 @@ export const ExcludedList = (props: Props) => {
                 props.onChange({excludes: [...excludes, key].sort(), includes: includes.filter(c => c !== key)})
             }
           }}
-          // onSpacebar={() => {
-          //   setChar(null);
-          //   if (selection < props.length - 1) setSelection(selection + 1);
-          // }}
-          // onBackspace={() => {
-          //   const wasNull = (chars[selection] ?? null) === null;
-          //   setChar(null)
-          //   if (wasNull && selection > 0) setSelection(selection - 1);
-          // }}
         />
       }
     </div>
