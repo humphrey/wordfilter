@@ -6,7 +6,7 @@ import { Field } from './Field'
 import { defaultFilter, WordFilter } from './Filtering'
 import { LengthBtnGroup } from './LengthSelector'
 import { MatchList } from './MatchList'
-import { usePatternFilter } from './PatternFilter'
+import { MiniPatternField, PatternFilterOffCanvas } from './PatternFilter'
 
 
 
@@ -27,15 +27,15 @@ function App() {
     onBlur: () => setFocused(null),
     onChange: newValue => setFilter({...filter, ...newValue})
   })
-  const patternField = usePatternFilter({
-    pattern: filter.pattern, 
-    length: filter.length,
-    focus: focused === 'pattern',
-    onFocus: () => setFocused('pattern'),
-    onBlur: () => setFocused(null),
-    onChange: pattern => setFilter({...filter, pattern})
-  })
-  const FieldKeyboard = includesField.Keyboard ?? excludesField.Keyboard ?? patternField.Keyboard;
+  // const patternField = usePatternFilter({
+  //   pattern: filter.pattern, 
+  //   length: filter.length,
+  //   focus: focused === 'pattern',
+  //   onFocus: () => setFocused('pattern'),
+  //   onBlur: () => setFocused(null),
+  //   onChange: pattern => setFilter({...filter, pattern})
+  // })
+  const FieldKeyboard = includesField.Keyboard ?? excludesField.Keyboard; // ?? patternField.Keyboard;
 
   return (
     <div> 
@@ -58,7 +58,7 @@ function App() {
 
     {/* </div> */}
 
-    <div className='border-bottom shadow sticky-top bg-secondary-subtle'>
+    <div className='border-bottom shadow sticky-top bg-white'>
 
       <Field title="Length" >
         <LengthBtnGroup 
@@ -70,20 +70,24 @@ function App() {
         />
       </Field>
 
-      <Field title="Pattern">
-        <patternField.Field/>
-      </Field>
 
 
 
       <div className='row'>
-          <div className='col-6'>
-            <Field title="Also encludes" /*onReset={includesField.onClear}*/>
+          <div className='col-4'>
+            <Field title="Pattern" /*onReset={() => setFilter({...filter, pattern: []})}*/>
+              <button className='btn btn-light btn-sm' onClick={() => setFocused('pattern')} disabled={filter.length === 0}>
+                <MiniPatternField filter={filter}/>
+              </button>
+            </Field>
+          </div>
+          <div className='col-4'>
+            <Field title="Include" /*onReset={includesField.onClear}*/>
               <includesField.Field/>
             </Field>
           </div>
-          <div className='col-6'>
-            <Field title="Also excludes" /*onReset={excludesField.onClear}*/>
+          <div className='col-4'>
+            <Field title="Exclude" /*onReset={excludesField.onClear}*/>
               <excludesField.Field/>
             </Field>
           </div>
@@ -100,7 +104,7 @@ function App() {
       {/* </div> */}
       <br/>
       
-      <Offcanvas 
+      {/* <Offcanvas 
         show={FieldKeyboard !== null} 
         placement='bottom' backdrop={false} scroll={true} style={{height: '240px'}}
         onHide={() => setFocused(null)}>
@@ -110,6 +114,19 @@ function App() {
         <Offcanvas.Body>
           {FieldKeyboard && <FieldKeyboard/>}
         </Offcanvas.Body>
+      </Offcanvas> */}
+
+      <Offcanvas 
+        show={focused === 'pattern'} 
+        placement='bottom' backdrop={false} scroll={true} style={{height: '240px'}}
+        onHide={() => setFocused(null)}>
+        <PatternFilterOffCanvas
+          filter={filter}
+          // focus: focused === 'pattern',
+          // onFocus: () => setFocused('pattern'),
+          // onBlur: () => setFocused(null),
+          onChange={pattern => setFilter({...filter, pattern})}
+        />
       </Offcanvas>
 
       <div>

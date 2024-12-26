@@ -1,143 +1,126 @@
 import cs from 'classnames';
 import React from 'react';
+import { Offcanvas } from 'react-bootstrap';
+import { WordFilter } from './Filtering';
 import { Keyboard } from './Keyboard';
-import { BaseFieldProps } from './Field';
 
 
-interface Props extends BaseFieldProps {
-  length: number | null
-  pattern: ReadonlyArray<string | null>
+interface Props {
+  filter: WordFilter
   onChange: (newPattern: ReadonlyArray<string | null>) => void
 }
 
-export const usePatternFilter = (props: Props) => {
 
-  const chars = Array.from({ length: props.length ?? 0 }).map((_, i) => props.pattern[i] ?? null) as ReadonlyArray<string | null>;
-  const [selection, setSelection] = React.useState<number | null>(null)
-  const selectionOrZero = selection ?? 0;
-  console.log('chars', chars,props.length)
+const notEnabledMsg = 'Requires a specified word length'
+
+
+const getPatternChars = (flt: WordFilter) => Array.from({ length: flt.length ?? 0 }).map((_, i) => flt.pattern[i] ?? null) as ReadonlyArray<string | null>;
+
+
+
+export const MiniPatternField = (props: {filter: WordFilter}) => {
+  const chars = getPatternChars(props.filter);
+
+  if (chars.length === 0) return <small className='text-muted'>N/A</small>;
+  return (
+    <div className='font-monospace'>
+      {chars.map((char, i) => (
+        <span 
+          key={i} 
+          className={cs(
+            'px-0', 
+            char !== null && 'fw-bold',
+          )}
+          style={{width: '30px'}}
+        >
+          {char ?? '?'}
+        </span>
+      ))}
+
+    </div>
+  );
+};
+
+
+
+export const PatternFilterButtons = (props: {filter: WordFilter, selected: number | null, onSelect: (index: number) => void}) => {
+  const chars = getPatternChars(props.filter)
+  if (chars.length > 0) return (
+    <div className='bg-light ms-auto rounded'>
+      {chars.map((char, i) => (
+        <button 
+          key={i} 
+          className={cs(
+            'btn px-0', 
+            props.selected === i ? 'btn-outline-primary' : 'btn-light',
+            char !== null && 'fw-bold',
+            props.selected !== i && char === null && 'text-muted',
+          )} 
+          onClick={() => props.onSelect(i)}
+          style={{width: '30px'}}
+        >
+          {char ?? '?'}
+        </button>
+      ))}
+      {chars.length === 0 && 
+        <button 
+          disabled
+          className={cs(
+            'btn btn-light text-muted', 
+          )}
+        >
+          <small>{notEnabledMsg}</small>
+        </button>}
+    </div>
+  );
+
+}
+
+export const PatternFilterOffCanvas = (props: Props) => {
+
+  const chars = getPatternChars(props.filter)
+  const [selection, setSelection] = React.useState<number | null>(0)
+  const len = props.filter.length;
+  
   const setChar = (value: string | null) => {
     if (selection === null) return;
     props.onChange([...chars.slice(0, selection), value, ...chars.slice(selection + 1)])
   };
 
-  // const Field = (
-  //   <div>
-  //     <div className='d-flex mb-3'>
-  //       <div className='bg-light ms-auto rounded'>
-  //         {chars.map((char, i) => (
-  //           <button 
-  //             key={i} 
-  //             className={cs(
-  //               'btn px-0', 
-  //               selection === i ? 'btn-outline-primary' : 'btn-light',
-  //               char !== null && 'fw-bold',
-  //               selection !== i && char === null && 'text-muted',
-  //             )} 
-  //             onClick={() => setSelection(selection === i ? null : i)}
-  //             style={{width: '30px'}}
-  //           >
-  //             {char ?? '?'}
-  //           </button>
-  //         ))}
 
-  //       </div>
-  //       <button 
-  //         className={cs('btn btn-sm btn-light ms-3 me-auto')} 
-  //         onClick={() => {
-  //           props.onChange(chars.map(() => null));
-  //           setSelection(0);
-  //         }}
-  //       >
-  //         Clear
-  //       </button>
-  //     </div>
-  //     {selection !== null &&
-  //       <Keyboard 
-  //         onKeyPress={(key) => {
-  //           setChar(key);
-  //           if (selection < props.length - 1) setSelection(selection + 1);
-  //         }}
-  //         onSpacebar={() => {
-  //           setChar(null);
-  //           if (selection < props.length - 1) setSelection(selection + 1);
-  //         }}
-  //         onBackspace={() => {
-  //           const wasNull = (chars[selection] ?? null) === null;
-  //           setChar(null)
-  //           if (wasNull && selection > 0) setSelection(selection - 1);
-  //         }}
-  //       />
-  //     }
-  //   </div>
-  // );
-
-  
-
-  const handleClear = () => {
-    props.onChange(chars.map(() => null));
-    setSelection(0);
-    props.onBlur();
-  };
-
-  return {
-    Field: () => (
-      <div>
-        <div className='d-flex mb-3'>
-          {chars.length > 0 &&
-            <div className='bg-light ms-auto rounded'>
-              {chars.map((char, i) => (
-                <button 
-                  key={i} 
-                  className={cs(
-                    'btn px-0', 
-                    selection === i ? 'btn-outline-primary' : 'btn-light',
-                    char !== null && 'fw-bold',
-                    selection !== i && char === null && 'text-muted',
-                  )} 
-                  onClick={() => {
-                    setSelection(selection === i ? null : i);
-                    props.onFocus();
-                  }}
-                  style={{width: '30px'}}
-                >
-                  {char ?? '?'}
-                </button>
-              ))}
-
-            </div>
-          }
-          {chars.length === 0 && <small className='text-muted'>Select a length to specify a pattern</small>}
-          <button 
-            className={cs('btn btn-sm btn-light ms-3 me-auto')} 
-            onClick={handleClear}
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-    ),
-
-
-    onClear: handleClear,
-
-    Keyboard: (props.focus && selection !== null) ? () => (
-      <Keyboard 
-        onKeyPress={(key) => {
-          setChar(key);
-          if (selectionOrZero < props.length - 1) setSelection(selectionOrZero + 1);
-        }}
-        onSpacebar={() => {
-          setChar(null);
-          if (selectionOrZero < props.length - 1) setSelection(selectionOrZero + 1);
-        }}
-        onBackspace={() => {
-          const wasNull = (chars[selectionOrZero] ?? null) === null;
-          setChar(null)
-          if (wasNull && selectionOrZero > 0) setSelection(selectionOrZero - 1);
-        }}
-      />
-    ) : null,
-
-  }
+  return (
+    <>
+      <Offcanvas.Header closeButton>
+        {/* <Offcanvas.Title> */}
+          <PatternFilterButtons 
+            {...props} 
+            selected={selection}
+            onSelect={index => setSelection(index)}
+          />
+        {/* </Offcanvas.Title> */}
+      </Offcanvas.Header>
+      <Offcanvas.Body>
+        {selection !== null && len !== null && 
+          <Keyboard 
+            onKeyPress={(key) => {
+              console.log('onKeyPress', key)
+              setChar(key);
+              if (selection < len - 1) setSelection(selection + 1);
+            }}
+            onSpacebar={() => {
+              console.log('onSpacebar')
+              setChar(null);
+              if (selection < len - 1) setSelection(selection + 1);
+            }}
+            onBackspace={() => {
+              console.log('onBackspace')
+              const wasNull = (chars[selection] ?? null) === null;
+              setChar(null)
+              if (wasNull && selection > 0) setSelection(selection - 1);
+            }}
+          />
+        }
+      </Offcanvas.Body>
+    </>
+  )
 }

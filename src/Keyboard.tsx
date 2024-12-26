@@ -46,7 +46,7 @@ export const Keyboard = (props: Props) => {
               char={char} 
               onClick={() => {
                 if (props.onBackspace && char === BACKSPACE_KEY) props.onBackspace();
-                if (props.onSpacebar && char === SPACE_KEY) props.onSpacebar();
+                else if (props.onSpacebar && char === SPACE_KEY) props.onSpacebar();
                 else props.onKeyPress(char)
               }}
               included={props.includes?.includes(char)}

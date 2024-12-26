@@ -10,10 +10,10 @@ interface Props {
 export const Field = (props: React.PropsWithChildren<Props>) => {
   return (
     <div className="py-2">
-      <div className='small text-muted'>{props.title}
+      <div className='small text-muted text-start px-3'>{props.title}
       </div>
-      <div className="d-flex px-1">
-        <div>{props.children}</div>
+      <div className="d-flex px-3">
+        {props.children}
         <div className="ms-auto">
           {props.onReset && <button className="btn btn-light btn-sm" onClick={props.onReset}>
             <FontAwesomeIcon icon={faXmark}/>
