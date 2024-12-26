@@ -39,7 +39,7 @@ export const Keyboard = (props: Props) => {
       {chars.map((row, rowIndex) => (
         <div key={rowIndex} className='my-1'>
           {row.map(char => (
-            <Key char={char} onClick={() => {
+            <Key key={char} char={char} onClick={() => {
               if (props.onBackspace && char === BACKSPACE_KEY) props.onBackspace();
               if (props.onSpacebar && char === SPACE_KEY) props.onSpacebar();
               else props.onKeyPress(char)

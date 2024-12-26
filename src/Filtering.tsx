@@ -4,7 +4,8 @@ import wordlist from './freq.words.json';
 
 export interface WordFilter {
   length: number | null
-  excluded: ReadonlyArray<string>
+  includes: ReadonlyArray<string>
+  excludes: ReadonlyArray<string>
   pattern: ReadonlyArray<string | null>
 }
 
@@ -22,6 +23,11 @@ export const useFilter = (filter: WordFilter) => {
       }
     }
   }
+
+  // Filter out words that do not include all the included letters
+  
+  // Filter out words that do include the excluded letters
+
   return {
     matches, 
   }; 

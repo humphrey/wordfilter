@@ -7,11 +7,13 @@ import { LengthSelector } from './LengthSelector'
 import { WordFilter } from './Filtering'
 import { Keyboard } from './Keyboard'
 import { PatternFilter } from './PatternFilter'
+import { ExcludedList } from './ExcludedList'
 
 function App() {
   const [filter, setFilter] = useState<WordFilter>({
     length: 5,
-    excluded: [],
+    excludes: [],
+    includes: [],
     pattern: [null, null, null, null, null],
   })
 
@@ -30,6 +32,10 @@ function App() {
               pattern={filter.pattern}
               onChange={pattern => setFilter({...filter, pattern})}
             />}
+      </div>
+      <div className='small text-muted'>Known letters</div>
+      <div>
+        <ExcludedList filter={filter} onChange={({includes, excludes}) => setFilter({...filter, includes, excludes})}/>
       </div>
       {/* <div className='m-3'> */}
         {/* <Keyboard/> */}
