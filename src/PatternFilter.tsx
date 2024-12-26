@@ -44,7 +44,7 @@ export const PatternFilter = (props: Props) => {
           className={cs('btn btn-sm btn-light ms-3 me-auto')} 
           onClick={() => {
             props.onChange(chars.map(() => null));
-            setSelection(null);
+            setSelection(0);
           }}
         >
           Clear

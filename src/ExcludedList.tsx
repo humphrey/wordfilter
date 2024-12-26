@@ -24,7 +24,7 @@ export const ExcludedList = (props: Props) => {
         >
           <small className='text-muted'>Includes</small>
           <div>
-            {props.filter.includes.map(char => <span className='fw-bold text-warning me-1'>{char}</span>)}
+            {props.filter.includes.map(char => <span key={char} className='fw-bold text-warning me-1'>{char}</span>)}
           </div>
           {props.filter.includes.length === 0 && <small className='text-muted'>&mdash;</small>}
         </button>
@@ -35,7 +35,7 @@ export const ExcludedList = (props: Props) => {
         >
           <small className='text-muted'>Excludes</small>
           <div>
-            {props.filter.excludes.map(char => <span className='fw-bold text-secondary me-1'>{char}</span>)}
+            {props.filter.excludes.map(char => <span key={char} className='fw-bold text-secondary me-1'>{char}</span>)}
           </div>
           {props.filter.excludes.length === 0 && <small className='text-muted'>&mdash;</small>}
         </button>

@@ -33,7 +33,7 @@ function App() {
               onChange={pattern => setFilter({...filter, pattern})}
             />}
       </div>
-      <div className='small text-muted'>Known letters</div>
+      <div className='small text-muted'>Unknown letters</div>
       <div>
         <ExcludedList filter={filter} onChange={({includes, excludes}) => setFilter({...filter, includes, excludes})}/>
       </div>
