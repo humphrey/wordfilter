@@ -1,4 +1,6 @@
 publish:
+  #!/bin/bash
+
   # Build the Vite project
   yarn build
 
@@ -15,9 +17,8 @@ publish:
   # Get the repository URL from the parent directory
   REPO_URL=$(git -C .. config --get remote.origin.url)
 
-
   # Push to the gh-pages branch (replace <REPO_URL> with your repository URL)
-  git push -f $REPO_URL master:gh-pages
+  git push -f $REPO_URL main:gh-pages
 
   # Return to the main project directory
   cd ..

@@ -5,6 +5,7 @@ import * as path from 'path'; // Use TypeScript's ES Module syntax
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/wordfilter/', // Use relative paths
   plugins: [react()],
   resolve: {
     alias: {
