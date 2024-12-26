@@ -8,22 +8,36 @@ const isSpecialKey = (char: string) => char === ENTER_KEY || char === BACKSPACE_
 const keys = [
   'qwertyuiop',
   'asdfghjkl',
-  ENTER_KEY + 'zxcvbnm' + BACKSPACE_KEY
+  // ENTER_KEY + 
+  'zxcvbnm' + BACKSPACE_KEY
 ]
 
 interface Props {
   // value: number | null
   // onChange: (newValue: number | null) => void
+  onKeyPress: (key: string) => void
+  onBackspace?: () => void
 }
 
 export const Keyboard = (props: Props) => {
+
+  const chars = keys.map(row => (Array.from(row, char => char)).filter(char => {
+    if (char === BACKSPACE_KEY) {
+      return props.onBackspace !== undefined;
+    }
+    return true;
+  }));
+
   return (
 
     <div>
-      {keys.map((row, rowIndex) => (
+      {chars.map((row, rowIndex) => (
         <div key={rowIndex} className='my-1'>
-          {(Array.from(row, char => char)).map(char => (
-            <Key char={char}/>
+          {row.map(char => (
+            <Key char={char} onClick={() => {
+              if (props.onBackspace && char === BACKSPACE_KEY) props.onBackspace();
+              else props.onKeyPress(char)
+            }}/>
           ))}
         </div>
       ))}
@@ -37,13 +51,15 @@ export const Keyboard = (props: Props) => {
 
 interface KeyProps {
   char: string
+  onClick: () => void
 }
 
-const Key = ({char}: KeyProps) => {
+const Key = ({char, onClick}: KeyProps) => {
   return (
     <button 
       className={cs('btn btn-outline-dark me-1 px-0', isSpecialKey(char) && 'fw-bold')}
       style={{width: isSpecialKey(char)  ? '45px' : '30px'}}
+      onClick={onClick}
     >
       {char}
     </button>

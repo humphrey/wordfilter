@@ -6,11 +6,13 @@ import { MatchList } from './MatchList'
 import { LengthSelector } from './LengthSelector'
 import { WordFilter } from './Filtering'
 import { Keyboard } from './Keyboard'
+import { PatternFilter } from './PatternFilter'
 
 function App() {
   const [filter, setFilter] = useState<WordFilter>({
     length: 5,
     excluded: [],
+    pattern: [null, null, null, null, null],
   })
 
   return (
@@ -19,9 +21,19 @@ function App() {
       <div>
         <LengthSelector value={filter.length} onChange={length => setFilter({...filter, length})}/>
       </div>
-      <div className='m-3'>
-        <Keyboard/>
+      <div className='small text-muted'>Pattern</div>
+      <div>
+        {filter.length === null 
+          ? '-' 
+          : <PatternFilter 
+              length={filter.length} 
+              pattern={filter.pattern}
+              onChange={pattern => setFilter({...filter, pattern})}
+            />}
       </div>
+      {/* <div className='m-3'> */}
+        {/* <Keyboard/> */}
+      {/* </div> */}
       <br/>
       <div>
         <MatchList filter={filter}/>

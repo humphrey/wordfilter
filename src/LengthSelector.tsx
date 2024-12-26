@@ -5,15 +5,19 @@ interface Props {
   onChange: (newValue: number | null) => void
 }
 
-const lengthOptions = Array.from({ length: 10 }, (_, i) => i + 1);;
+const lengthOptions = [2,3,4,5,6,7,8,9,10];
 
 export const LengthSelector = (props: Props) => {
   return (
-    <div className='btn-group'>
-      <button className={cs('btn btn-sm btn-light', props.value === null && 'active')} onClick={() => props.onChange(null)}>Any</button>
-      {lengthOptions.map((n) => (
-        <button key={n}  className={cs('btn btn-sm btn-light', props.value === n && 'active')} onClick={() => props.onChange(n)}>{n}</button>
-      ))}
+    <div>
+
+      <div className='btn-group'>
+        {lengthOptions.map((n) => (
+          <button key={n}  className={cs('btn btn-sm btn-light', props.value === n && 'active')} onClick={() => props.onChange(n)}>{n}</button>
+        ))}
+      </div>
+
+      <button className={cs('btn btn-sm btn-light ms-3', props.value === null && 'active')} onClick={() => props.onChange(null)}>Any</button>
     </div>
   )
 }
