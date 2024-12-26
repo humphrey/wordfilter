@@ -9,6 +9,13 @@ export interface WordFilter {
   pattern: ReadonlyArray<string | null>
 }
 
+export const defaultFilter: WordFilter = {
+  length: null,
+  excludes: [],
+  includes: [],
+  pattern: [],
+}
+
 export const useFilter = (filter: WordFilter) => {
   let matches = wordlist as ReadonlyArray<string>;
   let holes: null | number[] = null;

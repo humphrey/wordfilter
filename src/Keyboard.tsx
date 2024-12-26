@@ -39,7 +39,7 @@ export const Keyboard = (props: Props) => {
 
     <div>
       {chars.map((row, rowIndex) => (
-        <div key={rowIndex} className='my-1'>
+        <div key={rowIndex} className='my-1 d-flex justify-content-center'>
           {row.map(char => (
             <Key 
               key={char} 
