@@ -56,6 +56,10 @@ export const PatternFilter = (props: Props) => {
             setChar(key);
             if (selection < props.length - 1) setSelection(selection + 1);
           }}
+          onSpacebar={() => {
+            setChar(null);
+            if (selection < props.length - 1) setSelection(selection + 1);
+          }}
           onBackspace={() => {
             const wasNull = (chars[selection] ?? null) === null;
             setChar(null)
