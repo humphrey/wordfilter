@@ -5,7 +5,7 @@ import {
   LettersOffCanvas,
   IncludeExcludeMode,
   MiniLettersField,
-} from "./ExcludedList";
+} from "./Letters";
 import { Field, FieldButton } from "./Field";
 import { defaultFilter, WordFilter } from "./Filtering";
 import { LengthBtnGroup } from "./LengthSelector";
@@ -15,52 +15,9 @@ import { MiniPatternField, PatternFilterOffCanvas } from "./PatternFilter";
 function App() {
   const [filter, setFilter] = useState<WordFilter>(defaultFilter);
   const [mode, setMode] = React.useState<IncludeExcludeMode>("includes");
-  const [focused, setFocused] = useState<null | FocusType>(null);
-  // const includesField = useIncludedLettersField({
-  //   filter,
-  //   focus: focused === "includes",
-  //   onFocus: () => setFocused("includes"),
-  //   onBlur: () => setFocused(null),
-  //   onChange: (newValue) => setFilter({ ...filter, ...newValue }),
-  // });
-  // const excludesField = useExcludedLettersField({
-  //   filter,
-  //   focus: focused === "excludes",
-  //   onFocus: () => setFocused("excludes"),
-  //   onBlur: () => setFocused(null),
-  //   onChange: (newValue) => setFilter({ ...filter, ...newValue }),
-  // });
-  // const patternField = usePatternFilter({
-  //   pattern: filter.pattern,
-  //   length: filter.length,
-  //   focus: focused === 'pattern',
-  //   onFocus: () => setFocused('pattern'),
-  //   onBlur: () => setFocused(null),
-  //   onChange: pattern => setFilter({...filter, pattern})
-  // })
-  // const FieldKeyboard = includesField.Keyboard ?? excludesField.Keyboard; // ?? patternField.Keyboard;
-
+  const [focused, setFocused] = useState<null | "pattern" | "letters">(null);
   return (
     <div>
-      {/* <div className='d-flex bg-primary-subtle'> */}
-
-      {/* <LengthSelect value={filter.length} onChange={length => setFilter({...filter, length})}/>
-
-      {filter.length !== null &&
-        <PatternFilter 
-          length={filter.length} 
-          pattern={filter.pattern}
-          onChange={pattern => setFilter({...filter, pattern})}
-        />
-      } */}
-
-      {/* <button className='btn btn-light btn-sm ms-auto' onClick={() => setFilter(defaultFilter)}> */}
-      {/* <FontAwesomeIcon icon={faXmark}/> */}
-      {/* Reset */}
-      {/* </button> */}
-
-      {/* </div> */}
-
       <div className="border-bottom shadow sticky-top bg-white">
         <div className="px-3 pb-2 pt-1">
           <div className="row">
@@ -140,18 +97,9 @@ function App() {
             onChangeMode={(newMode) => setMode(newMode)}
           />
         )}
-        {/* {focused === "excludes" && (
-          <ExcludedLettersOffCanvas
-            filter={filter}
-            onChange={(newValue) => setFilter({ ...filter, ...newValue })}
-          />
-        )} */}
         {focused === "pattern" && (
           <PatternFilterOffCanvas
             filter={filter}
-            // focus: focused === 'pattern',
-            // onFocus: () => setFocused('pattern'),
-            // onBlur: () => setFocused(null),
             onChange={(pattern) => setFilter({ ...filter, pattern })}
           />
         )}
