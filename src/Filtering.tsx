@@ -3,6 +3,7 @@ import wordlist from './freq.words.json';
 
 export interface WordFilter {
   length: number | null
+  excluded: ReadonlyArray<string>
 }
 
 export const useFilter = (filter: WordFilter) => {
