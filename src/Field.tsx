@@ -6,23 +6,24 @@ import cs from "classnames";
 interface Props {
   title: string;
   onReset?: () => void;
+  align?: "start" | "center" | "end";
 }
 
 export const Field = (props: React.PropsWithChildren<Props>) => {
   return (
     <div className="pb-2">
-      <div className="small text-muted text-start">
+      <div className={`small text-muted text-${props.align ?? "start"}`}>
         <small>{props.title}</small>
       </div>
       <div className="d-flex">
         {props.children}
-        <div className="ms-auto">
-          {props.onReset && (
+        {props.onReset && (
+          <div className="ms-auto">
             <button className="btn btn-light btn-sm" onClick={props.onReset}>
               <FontAwesomeIcon icon={faXmark} />
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -18,7 +18,10 @@ function App() {
   const [focused, setFocused] = useState<null | "pattern" | "letters">(null);
   return (
     <div>
-      <div className="border-bottom shadow sticky-top bg-white">
+      <div
+        className="border-bottom shadow sticky-top bg-white container"
+        style={{ maxWidth: "540px" }}
+      >
         <div className="px-3 pb-2 pt-1">
           <div className="row">
             <div className="col-4"></div>
@@ -31,27 +34,24 @@ function App() {
                 <b className="">filter</b>
               </div>
             </div>
-            <div className="col-4 text-end">
-              <button
-                className="btn btn-sm btn-outline-success"
-                onClick={() => setFilter(defaultFilter)}
-              >
-                New word
-              </button>
-            </div>
           </div>
         </div>
-
-        <div className="px-3">
-          <Field title="Word length">
+        <div className="border bg-light rounded px-3 text-center">
+          <Field title="Select word length to start new word" align="center">
             <LengthBtnGroup
               value={filter.length}
               onChange={(length) => {
-                setFilter({ ...filter, length });
-                if (focused === null) setFocused("pattern");
+                setFilter({ ...defaultFilter, length });
+                if (focused === null) {
+                  if (length === null) setFocused("letters");
+                  else setFocused("pattern");
+                }
               }}
             />
           </Field>
+        </div>
+
+        <div className="px-3">
           <div className="row">
             <div className="col-5">
               <Field title="Pattern">
