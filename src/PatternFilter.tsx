@@ -3,6 +3,8 @@ import React from "react";
 import { Offcanvas } from "react-bootstrap";
 import { WordFilter } from "./Filtering";
 import { Keyboard } from "./Keyboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBroom } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   filter: WordFilter;
@@ -48,7 +50,7 @@ export const PatternFilterButtons = (props: {
           <button
             key={i}
             className={cs(
-              "btn px-0",
+              "btn btn-sm  px-0",
               props.selected === i ? "btn-outline-primary" : "btn-light",
               char !== null && "fw-bold",
               props.selected !== i && char === null && "text-muted"
@@ -60,7 +62,7 @@ export const PatternFilterButtons = (props: {
           </button>
         ))}
         {chars.length === 0 && (
-          <button disabled className={cs("btn btn-light text-muted")}>
+          <button disabled className={cs("btn btn-light btn-sm text-muted")}>
             <small>{notEnabledMsg}</small>
           </button>
         )}
@@ -86,6 +88,13 @@ export const PatternFilterOffCanvas = (props: Props) => {
     <>
       <Offcanvas.Header closeButton>
         {/* <Offcanvas.Title> */}
+        <button
+          type="button"
+          className={cs("btn btn-sm btn-outline-secondary border-0")}
+          onClick={() => props.onChange(chars.map(() => null))}
+        >
+          <FontAwesomeIcon icon={faBroom} />
+        </button>
         <PatternFilterButtons
           {...props}
           selected={selection}

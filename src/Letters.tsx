@@ -2,6 +2,8 @@ import cs from "classnames";
 import { Offcanvas } from "react-bootstrap";
 import { WordFilter } from "./Filtering";
 import { Keyboard } from "./Keyboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBroom, faEraser, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   filter: WordFilter;
@@ -45,8 +47,15 @@ export const LettersOffCanvas = (
   return (
     <>
       <Offcanvas.Header closeButton>
+        <button
+          type="button"
+          className={cs("btn btn-sm btn-outline-secondary border-0")}
+          onClick={() => props.onChange({ includes: [], excludes: [] })}
+        >
+          <FontAwesomeIcon icon={faBroom} />
+        </button>
         <div
-          className="btn-group"
+          className="btn-group ms-auto"
           role="group"
           aria-label="Select between including letters or excluding them"
         >
@@ -73,14 +82,6 @@ export const LettersOffCanvas = (
             Without
           </button>
         </div>
-
-        <button
-          type="button"
-          className={cs("btn btn-sm ms-3 btn-outline-dark")}
-          onClick={() => props.onChange({ includes: [], excludes: [] })}
-        >
-          Clear all
-        </button>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <Keyboard
