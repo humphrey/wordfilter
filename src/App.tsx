@@ -2,7 +2,6 @@ import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import {
   faCheckCircle,
   faHistory,
-  faInfo,
   faSortAlphaAsc,
   faSortNumericAsc,
 } from "@fortawesome/free-solid-svg-icons";

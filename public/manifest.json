@@ -16,6 +16,6 @@
   "start_url": "/wordfilter/",
   "scope": "/wordfilter/",
   "display": "standalone",
-  "background_color": "#e3f4f8",
-  "theme_color": "#e3f4f8"
+  "background_color": "#ebf8fb",
+  "theme_color": "#ebf8fb"
 }

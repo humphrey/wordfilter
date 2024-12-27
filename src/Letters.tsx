@@ -1,9 +1,9 @@
+import { faBroom } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cs from "classnames";
 import { Offcanvas } from "react-bootstrap";
 import { WordFilter } from "./Filtering";
 import { Keyboard } from "./Keyboard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBroom, faEraser, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   filter: WordFilter;
