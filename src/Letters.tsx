@@ -1,4 +1,5 @@
-import { faBroom } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faBroom, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cs from "classnames";
 import { Offcanvas } from "react-bootstrap";
@@ -55,30 +56,39 @@ export const LettersOffCanvas = (
           <FontAwesomeIcon icon={faBroom} />
         </button>
         <div
-          className="btn-group ms-auto"
+          className="ms-auto"
           role="group"
           aria-label="Select between including letters or excluding them"
         >
           <button
             type="button"
             className={cs(
-              "btn btn-sm",
-              props.mode === "includes" && "btn-outline-warning active",
-              props.mode === "excludes" && "btn-outline-secondary"
+              "btn btn-sm btn-light me-3"
+              // props.mode === "includes" &&
+              //   "border-warning text-white bg-warning"
+              // props.mode === "excludes" && "btn-outline-secondary"
             )}
             onClick={() => props.onChangeMode("includes")}
           >
+            <FontAwesomeIcon
+              icon={props.mode === "includes" ? faCheckCircle : faCircle}
+              className="me-2"
+            />
             With
           </button>
           <button
             type="button"
             className={cs(
-              "btn btn-sm",
-              props.mode === "includes" && "btn-outline-warning",
-              props.mode === "excludes" && "btn-outline-secondary active"
+              "btn btn-sm btn-light"
+              // props.mode === "includes" && "btn-outline-warning",
+              // props.mode === "excludes" && "btn-outline-secondary active"
             )}
             onClick={() => props.onChangeMode("excludes")}
           >
+            <FontAwesomeIcon
+              icon={props.mode === "excludes" ? faCheckCircle : faCircle}
+              className="me-2"
+            />
             Without
           </button>
         </div>

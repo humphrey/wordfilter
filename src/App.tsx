@@ -9,9 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cs from "classnames";
 import React, { useState } from "react";
 import { Dropdown, Offcanvas } from "react-bootstrap";
-import "./App.css";
 import { Field, FieldButton } from "./Field";
-import { defaultFilter, WordFilter } from "./Filtering";
+import { useFilters } from "./Filtering";
 import { LengthBtnGroup } from "./LengthSelector";
 import {
   IncludeExcludeMode,
@@ -21,10 +20,10 @@ import {
 import { MatchList } from "./MatchList";
 import { MiniPatternField, PatternFilterOffCanvas } from "./PatternFilter";
 
-function App() {
-  const [wordHistory, setWordHistory] = React.useState<WordFilter[]>([]);
+export const App = () => {
+  const filters = useFilters();
+  const { filter, history } = filters;
   const [sort, setSort] = React.useState<"alpha" | "popularity">("popularity");
-  const [filter, setFilter] = useState<WordFilter>(defaultFilter);
   const [mode, setMode] = React.useState<IncludeExcludeMode>("includes");
   const [focused, setFocused] = useState<null | "pattern" | "letters">(null);
 
@@ -95,18 +94,16 @@ function App() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item
-                      as="button"
-                      onClick={() => setWordHistory([])}
-                    >
+                    <Dropdown.Item as="button" onClick={history.clear}>
                       Clear history
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    {wordHistory.map((h, i) => (
+                    {history.filters.map((h) => (
                       <Dropdown.Item
                         as="button"
-                        key={i}
+                        key={h.id}
                         className="ps-2 d-flex align-items-center"
+                        onClick={() => filters.restore(h.id)}
                       >
                         {h.length === null && (
                           <code className="text-dark rounded">Any length</code>
@@ -133,7 +130,7 @@ function App() {
                         )}
                       </Dropdown.Item>
                     ))}
-                    {wordHistory.length === 0 && (
+                    {history.filters.length === 0 && (
                       <Dropdown.Item
                         as="button"
                         disabled
@@ -152,17 +149,8 @@ function App() {
               <LengthBtnGroup
                 value={filter.length}
                 onChange={(length) => {
-                  if (
-                    filter.pattern.filter((c) => c !== null).length > 0 ||
-                    filter.includes.length > 0 ||
-                    filter.excludes.length > 0
-                  )
-                    setWordHistory([filter, ...wordHistory]);
-                  setFilter({ ...defaultFilter, length });
-                  if (focused === null) {
-                    if (length === null) setFocused("letters");
-                    else setFocused("pattern");
-                  }
+                  filters.new(length);
+                  setFocused(length === null ? "letters" : "pattern");
                 }}
               />
             </Field>
@@ -209,25 +197,29 @@ function App() {
       >
         {focused === "letters" && (
           <LettersOffCanvas
+            key={filter.id}
             filter={filter}
-            onChange={(newValue) => setFilter({ ...filter, ...newValue })}
+            onChange={filters.update}
             mode={mode}
             onChangeMode={(newMode) => setMode(newMode)}
           />
         )}
         {focused === "pattern" && (
           <PatternFilterOffCanvas
+            key={filter.id}
             filter={filter}
-            onChange={(pattern) => setFilter({ ...filter, pattern })}
+            onChange={(pattern) => filters.update({ pattern })}
           />
         )}
       </Offcanvas>
 
       <div>
-        <MatchList filter={filter} sort={sort} />
+        <MatchList
+          filter={filter}
+          sort={sort}
+          onWordTap={filters.toggleStrikeout}
+        />
       </div>
     </div>
   );
-}
-
-export default App;
+};
